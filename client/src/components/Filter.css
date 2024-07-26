@@ -1,0 +1,27 @@
+.filter-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.filter-bar select {
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.filter-bar button {
+  padding: 5px 20px;
+  background-color: #00bfff;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.filter-bar button:hover {
+  background-color: #008fbf;
+}
