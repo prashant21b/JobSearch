@@ -45,7 +45,7 @@ const Card = ({ data }) => {
   };
 
   return (
-    <div className="App">
+    <div className='App container'>
       <Filter onFilterChange={handleFilterChange} />
       {currentCards.map((job) => (
         <JobCard

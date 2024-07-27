@@ -77,3 +77,31 @@ exports.getUserPost=async(req,res)=>{
            res.status(500).json({ msg: 'Server error' });
     }
 }
+
+
+exports.deletePost = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const creatorId = req.auth._id;
+
+        // Find the post by ID
+        const post = await Job.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ msg: 'Post not found' });
+        }
+
+        // Check if the creator matches
+        if (post.creator.toString() !== creatorId) {
+            return res.status(403).json({ msg: 'Unauthorized action' });
+        }
+
+        // Delete the post
+        await Job.findByIdAndDelete(postId);
+
+        res.status(200).json({ msg: 'Post deleted successfully' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: 'Server error' });
+    }
+};
