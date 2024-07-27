@@ -7,7 +7,7 @@ const Card = ({ data }) => {
   console.log(data,"card")
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredData, setFilteredData] = useState(data);
-  const cardsPerPage = 3;
+  const cardsPerPage = 5;
    
   useEffect(() => {
     setCurrentPage(1); // Reset to first page when data changes

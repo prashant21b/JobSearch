@@ -76,7 +76,8 @@ exports.login = async (req, res) => {
         // Remove sensitive data before sending the response
         user.password = undefined;
 
-        res.json({
+        res.status(200).json({
+             success:true,
             token,
             user
         });

@@ -1,4 +1,4 @@
-const expressjwt=require('express-jwt')
+const {expressjwt}=require('express-jwt')
 
 exports.requireSingIn=expressjwt({
     secret:process.env.JWT_SECRET,

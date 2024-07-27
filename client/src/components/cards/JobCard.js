@@ -1,20 +1,21 @@
 import React,{useState} from 'react';
 import './JobCard.css';
 import {Button,Modal} from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-
+//import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 const JobCard = ({ companyName, companyUrl, location, postedOn, title, type, skills, link }) => {
-  const navigate=useNavigate()
+  //const navigate=useNavigate()
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const formatDate = (date) => {
-    const now = new Date();
-    const postedDate = new Date(date);
-    const diff = Math.floor((now - postedDate) / (1000 * 60)); // Difference in minutes
-    return `${diff} min ago`;
+    // const now = new Date();
+    // const postedDate = new Date(date);
+    // const diff = Math.floor((now - postedDate) / (1000 * 60)); // Difference in minutes
+    // return `${diff} min ago`;
+    return moment(date).fromNow();
   };
 
   return (
