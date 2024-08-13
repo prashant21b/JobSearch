@@ -15,6 +15,7 @@ app.use('/api/v1',userRoutes)
 app.use('/api/v1/jobs',jobRoutes)
 
 
+
 app.listen(process.env.PORT,()=>{
     console.log(`port is listening at ${process.env.PORT}`)
 })

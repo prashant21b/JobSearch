@@ -1,12 +1,9 @@
-
-
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-
 const jobSchema = new Schema({
     id: {
-        type: Number,
+        type: String,
         required: true,
         unique: true
     },
@@ -49,6 +46,10 @@ const jobSchema = new Schema({
     },
     jobDescription: {
         type: String,
+        required: true
+    },
+    deadline: {
+        type: Date,
         required: true
     }
 });

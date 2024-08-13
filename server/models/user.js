@@ -18,10 +18,12 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
         minlength: 6 
     },
-    
+    googleId:{
+        type:String,
+        unique:true,
+    },
     createdAt: {
         type: Date,
         default: Date.now 

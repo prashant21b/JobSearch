@@ -1,6 +1,8 @@
 const User=require('../models/user')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 exports.register = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -86,3 +88,38 @@ exports.login = async (req, res) => {
         return res.status(400).send("Error! Try again");
     }
 };
+
+exports.continueWithGoogle=async(req,res)=>{
+    const { token } = req.body;
+
+    try {
+        // Verify the token with Google
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const { name, email, sub: googleId } = ticket.getPayload();
+             console.log(name,email,googleId)
+        // Check if the user already exists in your database
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Create a new user if not exists
+            user = new User({
+                name,
+                email,
+                googleId,
+            });
+            await user.save();
+        }
+
+        // Generate a JWT for the user
+        const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.status(200).json({ success: true, user, token: jwtToken });
+    } catch (error) {
+        console.error('Error during Google login:', error);
+        res.status(500).json({ success: false, message: 'Google login failed' });
+    }
+}

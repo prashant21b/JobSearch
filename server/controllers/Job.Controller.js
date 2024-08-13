@@ -6,12 +6,12 @@ exports.createJobPost = async (req, res) => {
     try {
         const {
             id, title, type, location,
-            companyName, companyUrl, skills,
+            companyName, companyUrl, skills,deadline,
             link, jobDescription
         } = req.body;
 
         // Validate the job data
-        if (!id || !title || !type || !location || !companyName || !companyUrl || !skills || !link || !jobDescription) {
+        if (!id || !title || !type || !location || !companyName || !companyUrl || !skills || !link || !jobDescription || !deadline) {
             return res.status(400).json({ msg: 'All fields are required' });
         }
 
@@ -23,7 +23,7 @@ exports.createJobPost = async (req, res) => {
 
         // Get the user ID from the authenticated request
         const creator = req.auth._id;
-
+       console.log(req.auth)
         // Create a new job instance
         const job = new Job({
             id,
@@ -34,6 +34,7 @@ exports.createJobPost = async (req, res) => {
             companyUrl,
             skills,
             link,
+            deadline,
             jobDescription,
             creator,
         });

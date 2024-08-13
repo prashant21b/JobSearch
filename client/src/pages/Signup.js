@@ -4,12 +4,17 @@ import { baseUrl } from '../url';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import { useContext } from 'react';
+import UserContext from '../Context/user';
+
 const Signup = () => {
     const [form, setForm] = useState({
         name: '',
         email: '',
         password: ''
     });
+    const [state, setState] = useContext(UserContext);
     const navigate=useNavigate()
     const handleChange = (e) => {
         setForm({
@@ -38,6 +43,30 @@ const Signup = () => {
          console.log(error)
          toast.error('Error in User Registration!')
         }   
+    };
+    const handleGoogleLogin = async (credentialResponse) => {
+        try {
+            console.log(credentialResponse)
+            const response = await axios.post(`${baseUrl}/auth/google`, {
+                token: credentialResponse.credential
+            });
+            if (response.data.success) {
+                setState({
+                    user: response.data.user,
+                    token: response.data.token
+                });
+                localStorage.setItem("Auth", JSON.stringify({
+                    user: response.data.user,
+                    token: response.data.token
+                }));
+                toast.success('Google Login success');
+                navigate('/');
+            } else {
+                toast.error(response.data.message || 'Google Login failed');
+            }
+        } catch (error) {
+            toast.error('Error in Google login');
+        }
     };
 
     return (
@@ -81,7 +110,15 @@ const Signup = () => {
             </form>
             <div className="alternative-options">
                 <p>Already registered? <a href="/login">Login</a></p>
-                <button className="google-button">Continue with Google</button>
+                <button className="google-button">
+                <GoogleLogin
+                        onSuccess={handleGoogleLogin}
+                        onError={() => {
+                            console.log('Login Failed');
+                            toast.error('Google Login Failed');
+                        }}
+                    />
+                </button>
             </div>
         </div>
     );

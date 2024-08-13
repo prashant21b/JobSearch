@@ -2,21 +2,14 @@ import React, { useState, useEffect } from 'react';
 import JobCard from './JobCard';
 import Filter from '../Filter';
 import './Card.css';
-
-const Card = ({ data }) => {
-  console.log(data,"card")
+import { GrNext,GrPrevious } from "react-icons/gr";
+const Card = ({ data, filteredData, setFilteredData }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState(data);
   const cardsPerPage = 5;
-   
+
   useEffect(() => {
     setCurrentPage(1); // Reset to first page when data changes
-
   }, [filteredData]);
-
-  if (!Array.isArray(data)) {
-    return <div>No data available</div>;
-  }
 
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
@@ -38,9 +31,11 @@ const Card = ({ data }) => {
 
   const handleFilterChange = (filters) => {
     const { jobType, location } = filters;
-    const newFilteredData = data.filter(job => 
-      job.type === jobType && job.location === location
-    );
+    const newFilteredData = data.filter(job => {
+      const matchesJobType = jobType ? job.type === jobType : true;
+      const matchesLocation = location ? job.location === location : true;
+      return matchesJobType && matchesLocation;
+    });
     setFilteredData(newFilteredData);
   };
 
@@ -62,11 +57,11 @@ const Card = ({ data }) => {
       ))}
       <div className="pagination">
         <button onClick={handlePrevPage} disabled={currentPage === 1}>
-          Previous
+        <GrPrevious />
         </button>
         <span>Page {currentPage} of {totalPages}</span>
         <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Next
+        <GrNext />
         </button>
       </div>
     </div>

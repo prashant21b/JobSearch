@@ -12,7 +12,8 @@ const Navbar = () => {
   const navigate = useNavigate()
   const [state, setState] = useContext(UserContext)
   const [show, setShow] = useState(false);
-
+  const [menuOpen, setMenuOpen] = useState(false);
+  const toggleMenu = () => setMenuOpen(!menuOpen);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [formData, setFormData] = useState({
@@ -24,6 +25,7 @@ const Navbar = () => {
     companyUrl: '',
     skills: [],
     link: '',
+    deadline:'',
     jobDescription: ''
   });
 
@@ -67,6 +69,7 @@ const Navbar = () => {
           companyUrl: '',
           skills: [],
           link: '',
+          deadline: '',
           jobDescription: ''
         });
       } else {
@@ -108,27 +111,32 @@ const Navbar = () => {
     <>
       <nav className="navbar">
         <div onClick={() => navigate('/')} className="navbar-text">Job Search</div>
-        <div className="navbar-buttons">
+        <div className={`navbar-buttons ${menuOpen ? 'show' : ''}`}>
           {isLogin ? (
             <>
               <button onClick={logoutHandler} className="navbar-button">Logout</button>
               <button className="navbar-button" onClick={handleShow}>Post</button>
-              <button className="navbar-button" onClick={()=>navigate('/manage')}>Manage</button>
+              <button className="navbar-button" onClick={() => navigate('/manage')}>Manage</button>
             </>
           ) : (
             <>
               <button onClick={() => navigate('/login')} className="navbar-button">Login</button>
-              <button onClick={() => navigate('/singup')} className="navbar-button">Signup</button>
+              <button onClick={() => navigate('/signup')} className="navbar-button">Signup</button>
             </>
           )}
+        </div>
+        <div className="hamburger" onClick={toggleMenu}>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
       </nav>
 
 
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} className="custom-modal">
         <Modal.Header closeButton>
-          <Modal.Title>Post New Job</Modal.Title>
+          <Modal.Title style={{textAlign:"center"}}>Post New Job</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form >
@@ -240,7 +248,17 @@ const Navbar = () => {
                 required
               />
             </Form.Group>
-
+            <Form.Group className="mb-3" controlId="formDeadline">
+              <Form.Label>Deadline</Form.Label>
+              <Form.Control
+                type="date"
+                name="deadline"
+                placeholder="Select deadline"
+                value={formData.deadline}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
             {/* <Button variant="primary" type="submit">
                 Submit
             </Button> */}
